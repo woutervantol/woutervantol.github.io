@@ -9,7 +9,6 @@ var camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(width, height);
 document.body.appendChild(renderer.domElement);
-//var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 var geometry = new THREE.SphereBufferGeometry(RADIUS, 64, 64);
 var world = new THREE.TextureLoader().load('world.jpg');
@@ -18,11 +17,45 @@ var material = new THREE.MeshPhongMaterial({map:world});
 material.bumpMap = texture;
 var sphere = new THREE.Mesh(geometry, material);
 
-
 var group = new THREE.Group();
+
+
+// window.addEventListener("mousedown", onMouseDown, false);
+
+
+// function onMouseDown(event){
+//     event.preventDefault();
+//     window.addEventListener("mousemove", onMouseMove, false);
+//     window.addEventListener('mouseup', onMouseUp, false);
+
+
+// }
+
+
+
+//get data
+var oReq = new XMLHttpRequest();
+oReq.onreadystatechange = function(){
+    var data = JSON.parse(this.responseText);
+    for (var i of data){
+        addPoint(i.reclat, i.reclong, i.mass);
+    }
+}
+oReq.open("GET", "testData2.json", true);
+oReq.send();
+
+
+
+
+
 group.add(sphere)
 group.add(addPoint(52, 5, 10))
-//group.add(addPoint(0, 0, 10))
+
+// for (var i = -180; i < 180; i += 8){
+//     for (var j = -90; j < 90; j += 8){
+//         group.add(addPoint(j, i, 100000000))
+//     }
+// }
 scene.add(group);
 
 
@@ -36,7 +69,7 @@ light.position.z = 30;
 scene.add(light);
 
 
-//group.rotation.x = 1
+// group.rotation.x = 1
 camera.position.z = 20;
 
 
@@ -48,27 +81,21 @@ function animate(){
     renderer.render(scene, camera);
 }
 
-function addPoint(lat, lon, mag){
-    var pointGeometry = new THREE.CylinderBufferGeometry(0.1, 0.1, 4, 32);
+function addPoint(lat, lon, mass){
+    var pointGeometry = new THREE.CylinderBufferGeometry(0.04, 0.04, Math.log(mass)/2, 32);//(radius top, radius bottom, length, number of edges)
     var point = new THREE.Mesh(pointGeometry, new THREE.MeshPhongMaterial());
     var theta = (90-lat)/180.* Math.PI;
     var phi = -lon/360.* Math.PI*2.;
-    
-    console.log(theta)
-    console.log(phi)
 
     point.position.x = RADIUS*Math.sin(theta)*Math.cos(phi);
     point.position.z = RADIUS*Math.sin(theta)*Math.sin(phi);
     point.position.y = RADIUS*Math.cos(theta);
 
-    console.log(point.position.x)
-    console.log(point.position.y)
-    console.log(point.position.z)
-    point.lookAt(0, 0, 0)
-    // point.rotation.x = theta
-    // point.rotation.y = phi
+    var vec3 = new THREE.Vector3(point.position.z, 0, -point.position.x).normalize()
+    point.rotateOnAxis(vec3, theta)
 
-    return(point)
+    group.add(point)
+    
 }
 
 
