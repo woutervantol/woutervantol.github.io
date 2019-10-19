@@ -20,16 +20,16 @@ var sphere = new THREE.Mesh(geometry, material);
 var group = new THREE.Group();
 
 
-// window.addEventListener("mousedown", onMouseDown, false);
+window.addEventListener("mousedown", onMouseDown, false);
 
 
-// function onMouseDown(event){
-//     event.preventDefault();
-//     window.addEventListener("mousemove", onMouseMove, false);
-//     window.addEventListener('mouseup', onMouseUp, false);
+function onMouseDown(event){
+    // event.preventDefault();
+    // window.addEventListener("mousemove", onMouseMove, false);
+    // window.addEventListener('mouseup', onMouseUp, false);
+    console.log("test")
 
-
-// }
+}
 
 
 
