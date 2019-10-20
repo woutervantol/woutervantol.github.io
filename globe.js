@@ -1,4 +1,5 @@
-var RADIUS = 10
+var RADIUS = 10;
+var mouse = {x:0, y:0}, mouseBegin = {x:0, y:0};
 
 var scene = new THREE.Scene();
 scene.background = new THREE.Color(0x222222);
@@ -23,14 +24,28 @@ var group = new THREE.Group();
 window.addEventListener("mousedown", onMouseDown, false);
 
 
-function onMouseDown(event){
-    // event.preventDefault();
-    // window.addEventListener("mousemove", onMouseMove, false);
-    // window.addEventListener('mouseup', onMouseUp, false);
-    console.log("test")
 
+function onMouseDown(event){
+    window.addEventListener("mouseup", onMouseUp, false);
+    window.addEventListener("mousemove", onMouseMove, false);
+
+    mouseBegin.x = event.clientX;
+    mouseBegin.y = event.clientY;
+
+    console.log(mouseBegin.x, mouseBegin.y);
 }
 
+function onMouseUp(event){
+    window.removeEventListener("mousemove", onMouseMove, false);
+    window.removeEventListener("mouseup", onMouseUp, false);
+    console.log("testup");
+}
+
+function onMouseMove(event){
+    group.rotation.y += (event.clientX-mouseBegin.x)/1000
+    group.rotation.x += (event.clientY-mouseBegin.y)/1000
+    console.log("testmove");
+}
 
 
 //get data
@@ -76,7 +91,7 @@ camera.position.z = 20;
 function animate(){
     requestAnimationFrame(animate);
 
-    group.rotation.y -= 0.01
+    //group.rotation.y -= 0.01
     
     renderer.render(scene, camera);
 }
