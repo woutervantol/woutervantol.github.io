@@ -2,15 +2,80 @@
 <html>
     <head>
 	    <meta charset="utf-8">
-        <title>Test</title>
+        <title>HCI</title>
         <style>
-            body { margin: 0; }
-            canvas { width: 100%; height: 100% }
+            html{
+                height:100%;
+            }
+            body { 
+                margin: 0;
+                padding: 0;
+                position: fixed;
+            }
+            canvas { 
+                width: 100%; 
+                height: 100%;
+            }
+            #infoblock{
+                display: block;
+                position: absolute;
+                color: white;
+                right: 30px;
+                top: 20px;
+            }
+            #options{
+                display: block;
+                position: absolute;
+                color: white;
+                font-family:'Times New Roman', Times, serif;
+                top: 50px;
+                left: 50px;
+            }
+
         </style>
-    
+        <script type='text/javascript' src='imports/three.js'></script>
+        <link rel='stylesheet' href='imports/jquery-ui-1.12.1.custom/jquery-ui.min.css'>
+        <script type='text/javascript' src='imports/jquery-ui-1.12.1.custom/external/jquery/jquery.js'></script>
+        <script type='text/javascript' src='imports/jquery-ui-1.12.1.custom/jquery-ui.min.js'></script>
+        
+        
+
+        
     </head>
     <body>
-        <script type='text/javascript' src='js/three.js'></script>
+        <div id="earthcontainer"></div>
+
+
+
+        <div id="infoblock">
+            <div id="header" style="display: block">
+                <h1>dit is een header</h3>
+                <br>
+            </div>
+            <div id="text" style="display: block; text-align: right">
+                <t>dit is allemaal informatieve tekst</t>
+                <p>aantal units:</p>
+                coolheid:
+                deze ene die je aanwijst:
+            </div>
+        </div>
+
+
+
+        <div id="options">
+            <h1>Options</h1>
+            <div id="slider" style="position: relative; width: 200px;"></div>
+            <span style="position: relative; top: 10px;">Years:</span>
+            <input type="text" id="yearmin" style="width: 50px; position: relative; top: 10px;">
+            <span style="position: relative; top: 10px;">-</span>
+            <input type="text" id="yearmax" style="width: 50px; position: relative; top: 10px;">
+            
+        </div>
+
+        
+        
+
         <script src='globe.js'></script>
+        <script src='options.js'></script>
     </body>
 </html>
