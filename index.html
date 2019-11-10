@@ -30,6 +30,10 @@
                 font-family:'Times New Roman', Times, serif;
                 top: 50px;
                 left: 50px;
+                height: 80%;
+            }
+            #showmassleft{
+                text-align: center;
             }
 
         </style>
@@ -47,16 +51,40 @@
 
 
 
+        <div id="countblock" style="padding: 10px; position: absolute; right: 50px; bottom: 50px;  color:white; display: block; border: 1px solid">
+            <label for="count">Number of meteorites shown: </label>
+            <h1 id="count" style="color: white; font-size: 400%; position: relative; margin: 0 auto">0</h1>
+        </div>
+
         <div id="infoblock">
             <div id="header" style="display: block">
-                <h1>dit is een header</h3>
-                <br>
+                <h1>Meteorite name</h3>
+                
             </div>
-            <div id="text" style="display: block; text-align: right">
-                <t>dit is allemaal informatieve tekst</t>
-                <p>aantal units:</p>
-                coolheid:
-                deze ene die je aanwijst:
+            <div id="text" style="display: block; text-align: left">
+                <label for="name">name: </label>
+                <input type="text" id="name" style="border:0; background: unset; color:white;">
+                <br>
+                <label for="nametype">nametype:</label>
+                <input type="text" id="nametype" style="border:0; background: unset; color:white;">
+                <br>
+                <label for="recclass">recclass:</label>
+                <input type="text" id="recclass" style="border:0; background: unset; color:white;">
+                <br>
+                <label for="mass">mass:</label>
+                <input type="text" id="mass" style="border:0; background: unset; color:white;">
+                <br>
+                <label for="fall">fall:</label>
+                <input type="text" id="fall" style="border:0; background: unset; color:white;">
+                <br>
+                <label for="year">year:</label>
+                <input type="text" id="year" style="border:0; background: unset; color:white;">
+                <br>
+                <label for="reclat">reclat:</label>
+                <input type="text" id="reclat" style="border:0; background: unset; color:white;">
+                <br>
+                <label for="reclong">reclong:</label>
+                <input type="text" id="reclong" style="border:0; background: unset; color:white;">
             </div>
         </div>
 
@@ -64,12 +92,29 @@
 
         <div id="options">
             <h1>Options</h1>
-            <div id="slider" style="position: relative; width: 200px;"></div>
-            <span style="position: relative; top: 10px;">Years:</span>
-            <input type="text" id="yearmin" style="width: 50px; position: relative; top: 10px;">
-            <span style="position: relative; top: 10px;">-</span>
-            <input type="text" id="yearmax" style="width: 50px; position: relative; top: 10px;">
-            
+            <div id="year" style="position: relative;">
+                <div id="yearslider" style="width: 200px; margin: 10px;"></div>
+                Years:
+                <input type="text" id="yearmin" style="width: 40px;">
+                -
+                <input type="text" id="yearmax" style="width: 40px;">
+            </div>
+
+            <div id="mass" style="position: relative; top: 20px;">
+                <div id="massslider" style="width: 200px; margin: 10px;">
+                  <div id="showmassleft" class="ui-slider-handle"></div>
+                  <div id="showmassright" class="ui-slider-handle"></div>
+                </div>
+                Mass(g):
+                <input type="text" id="massmin" style="width: 56px;">
+                -
+                <input type="text" id="massmax" style="width: 56px;">
+            </div>
+
+
+            <div id="button">
+                <input id="apply" type="button" value="apply" style="position: absolute; width:100%; bottom: 0px; height: 50px; font-size: 30px;">
+            </div>
         </div>
 
         

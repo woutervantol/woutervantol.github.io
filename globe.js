@@ -1,5 +1,8 @@
 var RADIUS = 10;
-var mouse = {x:0, y:0}
+var mouseray = new THREE.Vector2();
+var mouse = new THREE.Vector2();
+
+var raycaster = new THREE.Raycaster();
 
 var scene = new THREE.Scene();
 scene.background = new THREE.Color(0x222222);
@@ -22,24 +25,43 @@ material.bumpMap = texture;
 var sphere = new THREE.Mesh(geometry, material);
 
 var group = new THREE.Group();//alle meteorieten worden aan deze groep toegevoegd zodat ze samen geroteerd kunnen worden
-
+group.add(sphere);
 
 
 container.addEventListener("mousedown", onMouseDown, false);
 container.addEventListener("wheel", onMouseWheel, false);
+container.addEventListener("mousemove", onMouseMove, false);
 
 function onMouseDown(event){
     container.addEventListener("mouseup", onMouseUp, false);
-    container.addEventListener("mousemove", onMouseMove, false);
+    container.addEventListener("mousemove", onMouseDrag, false);
+
 
     mouse.x = event.clientX;
     mouse.y = event.clientY;
+
+
+    
+    // mouseray.x =  ( event.clientX / window.innerWidth ) * 2 - 1;
+    // mouseray.y = -( event.clientY / window.innerHeight) * 2 + 1;
+
+    // raycaster.setFromCamera(mouseray, camera);
+    // var intersects = raycaster.intersectObjects(group.children);
+    // if (intersects[0].object != group.children[0]){
+    //     console.log(intersects[0].object.material.color);
+    //     intersects[0].object.material.color.setHex(0xff0000);
+    //     console.log(intersects[0].object.material.colorWrite)
+    // }
+
+
+
+
 }
 function onMouseUp(event){
-    container.removeEventListener("mousemove", onMouseMove, false);
+    container.removeEventListener("mousemove", onMouseDrag, false);
     container.removeEventListener("mouseup", onMouseUp, false);
 }
-function onMouseMove(event){
+function onMouseDrag(event){
     //rotatie van muisbeweging hangt af van hoe ver je bent ingezoomd
     //De -10 komt van het feit dat de maximale z positie van de camera 11 is. (empirisch geconstateerd)
     group.rotation.x += (event.clientY-mouse.y)/3000*(camera.position.z-10)
@@ -48,6 +70,8 @@ function onMouseMove(event){
     mouse.x = event.clientX
     mouse.y = event.clientY
 }
+
+
 function onMouseWheel(event){
     if (camera.position.z >= 11){
         camera.position.z += event.deltaY/20.;
@@ -59,25 +83,79 @@ function onMouseWheel(event){
     } else{
         camera.position.z = 50;
     }
+        
     
 }
 
 
-//dataverwerking
+var intersected;
+var red = new THREE.Color(0xff0000);
+function onMouseMove(event){
+    mouseray.x =  ( event.clientX / window.innerWidth ) * 2 - 1;
+    mouseray.y = -( event.clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(mouseray, camera);
+    var intersects = raycaster.intersectObjects(group.children);
+    if (intersects.length>0){
+        if (intersects[0].object != group.children[0]){
+            if (intersects[0].object.color != red){
+                if (intersected){
+                    intersected.material.color.setHex(0xffffff);
+                }
+                
+                intersects[0].object.material.color.setHex(0xff0000);
+                group.add(intersects[0].object)
+                intersected = intersects[0].object
+
+
+                document.getElementById("name").value = intersects[0].object.name
+                document.getElementById("nametype").value = intersects[0].object.nametype
+                document.getElementById("recclass").value = intersects[0].object.recclass
+                document.getElementById("mass").value = intersects[0].object.mass
+                document.getElementById("fall").value = intersects[0].object.fall
+                document.getElementById("year").value = intersects[0].object.year
+                document.getElementById("reclat").value = intersects[0].object.reclat
+                document.getElementById("reclong").value = intersects[0].object.reclong
+            }
+        }
+    }
+}
+
+
+
+
+
+//dataverwerking    
 var oReq = new XMLHttpRequest();
 oReq.onreadystatechange = function(){
     var data = JSON.parse(this.responseText);
+    var count = 0
+
+    var yearmin = document.getElementById("yearmin").value;
+    var yearmax = document.getElementById("yearmax").value;
+
+    var massmin = document.getElementById("massmin").value;
+    var massmax = document.getElementById("massmax").value;
+
+
     for (var i of data){
-        addPoint(i.reclat, i.reclong, i.mass);
+        if (i.year >= yearmin && i.year <= yearmax && i.mass >= massmin && i.mass <= massmax){
+            addPoint(i.name, i.id,i.nametype, i.recclass, i.mass, i.fall, i.year, i.reclat, i.reclong);
+            count++;
+        }
     }
+    document.getElementById("count").innerHTML = count
 }
-oReq.open("GET", "data/testData2.json", true);
-oReq.send();
+
+
+function Update(){
+    oReq.open("GET", "data/testData2.json", true);
+    oReq.send();
+}
+
+Update()
 
 
 
-group.add(sphere);
-//group.add(addPoint(52, 5, 10));
 
 
 scene.add(group);
@@ -86,7 +164,7 @@ var light = new THREE.PointLight(0xffffff);
 light.position.x = 20;
 light.position.y = 20;
 light.position.z = 30;
-//de camera is in de z richting dus dit komt van 
+//de camera is in de z richting dus dit komt van rechts achter je q
 
 scene.add(light);
 
@@ -98,14 +176,16 @@ function animate(){
     requestAnimationFrame(animate);
 
     renderer.render(scene, camera);
+
+    
+
 }
 
-function addPoint(lat, lon, mass){
+function addPoint(name, id, nametype, recclass, mass, fall, year, reclat, reclong){
     var pointGeometry = new THREE.CylinderBufferGeometry(0.04, 0.04, Math.log(mass)/2, 4);//(radius top, radius bottom, length, number of edges)
     var point = new THREE.Mesh(pointGeometry, new THREE.MeshPhongMaterial());
-    var theta = (90-lat)/180.* Math.PI;
-    var phi = -lon/360.* Math.PI*2.;
-
+    var theta = (90-reclat)/180.* Math.PI;
+    var phi = -reclong/360.* Math.PI*2.;
     point.position.x = RADIUS*Math.sin(theta)*Math.cos(phi);
     point.position.z = RADIUS*Math.sin(theta)*Math.sin(phi);
     point.position.y = RADIUS*Math.cos(theta);
@@ -113,9 +193,25 @@ function addPoint(lat, lon, mass){
     var vec3 = new THREE.Vector3(point.position.z, 0, -point.position.x).normalize();
     point.rotateOnAxis(vec3, theta);
 
+    point.material.color.set(0xffffff)
+
+    point.name = name
+    point.nametype = nametype
+    point.recclass = recclass
+    point.mass = mass
+    point.fall = fall
+    point.year = year
+    point.reclat = reclat
+    point.reclong = reclong
+
+
+
+
     group.add(point);
     
 }
+
+
 
 
 animate();
