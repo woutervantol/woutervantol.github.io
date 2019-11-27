@@ -222,18 +222,20 @@ function animate(){
         if (group.rotation.x - targetlat < 0.01 && group.rotation.y - targetlong < 0.01){
             rotating = false;
         }else{
-            group.rotation.x -= (group.rotation.x - targetlat)/10
-            group.rotation.y -= (group.rotation.y - targetlong)/10
+            group.rotation.x -= (group.rotation.x - targetlat)/5
+            group.rotation.y -= (group.rotation.y - targetlong)/5
         }
     }
 }
 
 function addPoint(name, nametype, recclass, mass, fall, year, reclat, reclong){
-    var pointGeometry = new THREE.CylinderBufferGeometry(0.04*Math.log10(Math.log(mass)+10), 0.04*Math.log10(mass)/5, (Math.log10(mass)**2)/5, 3);//(radius top, radius bottom, length, number of edges)
+    //var pointGeometry = new THREE.CylinderBufferGeometry(0.04*Math.log10(Math.log(mass)+10), 0.04*Math.log10(mass)/5, (Math.log10(mass)**2)/5, 3);//(radius top, radius bottom, length, number of edges)
+    var pointGeometry = new THREE.BoxBufferGeometry(0.04*Math.log10(Math.log10(mass)+10), (Math.log10(mass)**2)/5, 0.04*Math.log10(Math.log10(mass)+10));//(radius top, radius bottom, length, number of edges)
+    
     //probeer:
         //width:
-            //0.04*log10(log(mass)+10)
-            //0.04*log10(mass)/5
+            //0.04*Math.log10(log(mass)+10)
+            //0.04*Math.log10(mass)/5
         //height:
             //log(mass)/2
             //log(mass)
