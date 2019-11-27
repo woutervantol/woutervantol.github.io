@@ -132,7 +132,7 @@ function onMouseMove(event){
 var data
 
 var oReq = new XMLHttpRequest();
-oReq.open("GET", "data/testData2.json", true);
+oReq.open("GET", "data/testData.json", true);
 oReq.onreadystatechange = function(){
     data = JSON.parse(this.responseText);
     var masses = []
