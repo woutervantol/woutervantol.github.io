@@ -196,9 +196,18 @@ scene.add(light);
 
 camera.position.z = 20;
 
+var rotating = false
+var targetlat = 0
+var targetlong = 0
 function pan(name){
-    console.log("roteer naar locatie van")
-    console.log(name)
+    rotating = true
+    var country = countries[countrylist.findIndex(function(x){return x==name})]
+    console.log(country)
+    targetlat = (country.lat)/180.*Math.PI
+    targetlong = -(country.long+90)/360.*Math.PI*2
+    console.log(group.rotation)
+    console.log(targetlat)
+    console.log(targetlong)
 }
 
 
@@ -209,8 +218,14 @@ function animate(){
 
     renderer.render(scene, camera);
 
-    
-
+    if (rotating){
+        if (group.rotation.x - targetlat < 0.01 && group.rotation.y - targetlong < 0.01){
+            rotating = false;
+        }else{
+            group.rotation.x -= (group.rotation.x - targetlat)/10
+            group.rotation.y -= (group.rotation.y - targetlong)/10
+        }
+    }
 }
 
 function addPoint(name, nametype, recclass, mass, fall, year, reclat, reclong){

@@ -94,9 +94,8 @@ $(function(){
     $("#tags").autocomplete({
         source: countrylist,
         minLength: 0,
-        select: function(){
-            //pan($("#tags").value)
-            console.log($(this).autocomplete("instance"));
+        select: function(event, ui){
+            pan(ui.item.value)
         }
 
     });
