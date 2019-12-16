@@ -78,13 +78,17 @@ function onMouseDrag(event){
 function onMouseWheel(event){
     if (camera.position.z >= 11){
         camera.position.z += event.deltaY/20.;
+        camera.position.y += event.deltaY/20./10.;
     } else{
         camera.position.z = 11;
+        camera.position.y = 11/10.;
     }
     if (camera.position.z <= 50){
         camera.position.z += event.deltaY/20.;
+        camera.position.y += event.deltaY/20./10.;
     } else{
         camera.position.z = 50;
+        camera.position.y = 50/10.;
     }
         
     
@@ -104,9 +108,11 @@ function onMouseMove(event){
             if (intersects[0].object.color != red){
                 if (intersected){
                     intersected.material.color.setHex(0xffffff);
+                    console.log(intersected.material)
+                    //intersected.normalScale = 
                 }
                 
-                intersects[0].object.material.color.setHex(0xff0000);
+                intersects[0].object.material.color.setHex(0xff00ff);
                 group.add(intersects[0].object)
                 intersected = intersects[0].object
 
@@ -171,8 +177,8 @@ function Update(){
     var massmax = document.getElementById("massmax").value;
 
     for (var i of data){
-        if (i.year >= yearmin && i.year <= yearmax && i.mass >= massmin && i.mass <= massmax){
-            addPoint(i.name,i.nametype, i.recclass, i.mass, i.fall, i.year, i.reclat, i.reclong);
+        if (i.year >= yearmin && i.year <= yearmax && i.mass/1000 >= massmin && i.mass <= massmax){
+            addPoint(i.name,i.nametype, i.recclass, i.mass/1000, i.fall, i.year, i.reclat, i.reclong);
             count++;
         }
     }
@@ -184,7 +190,7 @@ function Update(){
 
 
 scene.add(group);
-scene.add(new THREE.AmbientLight(0x111111));
+scene.add(new THREE.AmbientLight(0x333333));
 var light = new THREE.PointLight(0xffffff);
 light.position.x = 20;
 light.position.y = 20;
@@ -195,6 +201,7 @@ scene.add(light);
 
 
 camera.position.z = 20;
+camera.position.y = 2;
 
 var rotating = false
 var targetlat = 0
@@ -230,7 +237,7 @@ function animate(){
 
 function addPoint(name, nametype, recclass, mass, fall, year, reclat, reclong){
     //var pointGeometry = new THREE.CylinderBufferGeometry(0.04*Math.log10(Math.log(mass)+10), 0.04*Math.log10(mass)/5, (Math.log10(mass)**2)/5, 3);//(radius top, radius bottom, length, number of edges)
-    var pointGeometry = new THREE.BoxBufferGeometry(0.04*Math.log10(Math.log10(mass)+10), (Math.log10(mass)**2)/5, 0.04*Math.log10(Math.log10(mass)+10));//(radius top, radius bottom, length, number of edges)
+    var pointGeometry = new THREE.BoxBufferGeometry(0.04*Math.log10(Math.log10(mass*1000)+10), (Math.log10(mass*1000)**2)/5, 0.04*Math.log10(Math.log10(mass*1000)+10));
     
     //probeer:
         //width:

@@ -32,6 +32,14 @@ yearmax.oninput = function(){
     $("#yearslider").slider("values", 1, yearmax.value);
 }
 
+massmin.oninput = function(){
+    $("#massslider").slider("values", 0, Math.log10(massmin.value));
+    //console.log($("#slider").slider("values", 0))
+}
+massmax.oninput = function(){
+    $("#massslider").slider("values", 1, Math.log10(massmax.value));
+}
+
 apply.onclick = function(){
     for (i=group.children.length; i >= 1; i--){//0 mag niet weg want dat is de aarde
         group.remove(group.children[i]);
@@ -61,9 +69,9 @@ $(function(){
     var handleleft = $("#showmassleft");
     var handleright = $("#showmassright");
     $("#massslider").slider({
-        min: 0,
-        max: 8,
-        values: [0, 8],
+        min: -3,
+        max: 5,
+        values: [-3, 5],
         step: 0.1,
         range: true,
         classes: {
@@ -78,8 +86,16 @@ $(function(){
         },
         slide: function(ui){
             //om de textvakjes de waardes van de slider te geven
-            massmin.value = Math.floor(10**$(this).slider("values")[0])
-            massmax.value = Math.floor(10**$(this).slider("values")[1])
+            if ($(this).slider("values")[0] < 2){
+                massmin.value = Math.floor(10**$(this).slider("values")[0]*1000)/1000// de * en / 1000 zijn zodat de floor hem afrond op 3 cijfers na de komma
+            }else{
+                massmin.value = Math.floor(10**$(this).slider("values")[0])
+            }
+            if ($(this).slider("values")[1] < 2){
+                massmax.value = Math.floor(10**$(this).slider("values")[1]*1000)/1000
+            }else{
+                massmax.value = Math.floor(10**$(this).slider("values")[1])
+            }
             handleleft.text($(this).slider("values")[0]);
             handleright.text($(this).slider("values")[1]);   
             

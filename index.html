@@ -22,17 +22,19 @@
                 display: block;
                 position: absolute;
                 color: white;
-                left: 65%;
-                top: 20px;
+                font-size: 20px;
+                left: 80%;
+                top: 10%;
             }
             #options{
                 display: block;
                 position: absolute;
                 color: white;
-                font-family:'Times New Roman', Times, serif;
-                top: 50px;
+                /* font-family:'Times New Roman', Times, serif; */
+                top: 10%;
                 left: 50px;
                 height: 80%;
+                width: 200px;
                 
             }
             #showmassleft{
@@ -55,48 +57,48 @@
 
         
     </head>
-    <body>
+    <body style="font-family:sans-serif;">
         <div id="earthcontainer"></div>
 
+        <div id="headerheader" style="display: block; font-size: 60px; position: absolute; top: 10px; color: white; width: 100%; text-align: center">
+            <label>Meteorite landing sites</label>
+        </div>
 
-
-        <div id="countblock" style="padding: 10px; position: absolute; right: 50px; bottom: 50px;  color:white; display: block; border: 1px solid">
+        <div id="countblock" style="padding: 10px; position: absolute; left: 80%; top: 80%;  color:white; display: block; border: 1px solid">
             <label for="count">Number of meteorites shown: </label>
             <h1 id="count" style="color: white; font-size: 400%; position: relative; margin: 0 auto">0</h1>
         </div>
 
         <div id="infoblock">
-            <div id="headerheader" style="display: block; font-size: 50px;">
-                <head>Meteorite landing sites</head>
-            </div>
-            <div id="header" style="position: relative; display: block; left: 50%;">
+            
+            <div id="header" style="position: relative; display: block; font-size: 25px;">
                 <h3>Selected meteorite</h3>
                 
             </div>
-            <div id="text" style="position: relative; display: block; text-align: left; left: 50%;">
+            <div id="text" style="position: relative; display: block; text-align: left;">
                 <label for="name">name: </label>
-                <input type="text" id="name" style="border:0; background: unset; color:white;">
+                <input type="text" id="name" style="border:0; background: unset; color:white; font-family:sans-serif;font-size: 20px;">
                 <br>
                 <label for="nametype">nametype:</label>
-                <input type="text" id="nametype" style="border:0; background: unset; color:white;">
+                <input type="text" id="nametype" style="border:0; background: unset; color:white; font-family:sans-serif;font-size: 20px;">
                 <br>
                 <label for="recclass">recclass:</label>
-                <input type="text" id="recclass" style="border:0; background: unset; color:white;">
+                <input type="text" id="recclass" style="border:0; background: unset; color:white; font-family:sans-serif;font-size: 20px;">
                 <br>
-                <label for="mass">mass:</label>
-                <input type="text" id="mass" style="border:0; background: unset; color:white;">
+                <label for="mass">mass(kg):</label>
+                <input type="text" id="mass" style="border:0; background: unset; color:white; font-family:sans-serif;font-size: 20px;">
                 <br>
                 <label for="fall">fall:</label>
-                <input type="text" id="fall" style="border:0; background: unset; color:white;">
+                <input type="text" id="fall" style="border:0; background: unset; color:white; font-family:sans-serif;font-size: 20px;">
                 <br>
                 <label for="year">year:</label>
-                <input type="text" id="year" style="border:0; background: unset; color:white;">
+                <input type="text" id="year" style="border:0; background: unset; color:white; font-family:sans-serif;font-size: 20px;">
                 <br>
                 <label for="reclat">reclat:</label>
-                <input type="text" id="reclat" style="border:0; background: unset; color:white;">
+                <input type="text" id="reclat" style="border:0; background: unset; color:white; font-family:sans-serif;font-size: 20px;">
                 <br>
                 <label for="reclong">reclong:</label>
-                <input type="text" id="reclong" style="border:0; background: unset; color:white;">
+                <input type="text" id="reclong" style="border:0; background: unset; color:white; font-family:sans-serif;font-size: 20px;">
             </div>
         </div>
 
@@ -105,12 +107,15 @@
 
         <div id="options">
             <h1>Options</h1>
-            <div id="year" style="position: relative;">
-                <div id="yearslider" style="width: 200px; margin: 10px;"></div>
+            <div id="year" style="position: relative; width: 80%">
+                <div id="yearslider" style="margin: 10px;"></div>
                 Years:
                 <input type="text" id="yearmin" style="width: 40px;">
                 -
                 <input type="text" id="yearmax" style="width: 40px;">
+            </div>
+            <div style="position: relative; right: 0px; width: 20%">
+                <input id="resetyears" type="button" value="reset" style="width: 100%;">
             </div>
 
             <div id="mass" style="position: relative; top: 20px;">
@@ -119,7 +124,7 @@
                   <div id="showmassright" class="ui-slider-handle"></div>
                   <div id="sliderrange" class="ui-slider-range"></div>
                 </div>
-                Mass(g):
+                Mass(kg):
                 <input type="text" id="massmin" style="width: 56px;">
                 -
                 <input type="text" id="massmax" style="width: 56px;">
