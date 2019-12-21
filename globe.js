@@ -34,7 +34,7 @@ container.addEventListener("wheel", onMouseWheel, false);
 container.addEventListener("mousemove", onMouseMove, false);
 
 function onMouseDown(event){
-    container.addEventListener("mouseup", onMouseUp, false);
+    document.addEventListener("mouseup", onMouseUp, false);
     container.addEventListener("mousemove", onMouseDrag, false);
 
     
@@ -62,7 +62,7 @@ function onMouseDown(event){
 }
 function onMouseUp(event){
     container.removeEventListener("mousemove", onMouseDrag, false);
-    container.removeEventListener("mouseup", onMouseUp, false);
+    document.removeEventListener("mouseup", onMouseUp, false);
 }
 function onMouseDrag(event){
     //rotatie van muisbeweging hangt af van hoe ver je bent ingezoomd
@@ -107,24 +107,34 @@ function onMouseMove(event){
         if (intersects[0].object != group.children[0]){
             if (intersects[0].object.color != red){
                 if (intersected){
-                    intersected.material.color.setHex(0xffffff);
-                    console.log(intersected.material)
+                    intersected.material = new THREE.MeshStandardMaterial();
+                    waarde = (Math.log10(intersected.mass*1000)**2)/5
+                    maxwaarde = (Math.log10(10**5)**2)/5
+                    intersected.material.color.set(new THREE.Color(waarde/maxwaarde, 1-waarde/maxwaarde, 0))
+                    //intersected.material.color.setHex(0xffffff);
+                    //console.log(intersected.mass)
+                    // console.log(intersects[0])
                     //intersected.normalScale = 
                 }
-                
-                intersects[0].object.material.color.setHex(0xff00ff);
-                group.add(intersects[0].object)
-                intersected = intersects[0].object
+             
+                waarde = (Math.log10(intersects[0].object.mass*1000)**2)/5
+                maxwaarde = (Math.log10(10**5)**2)/5
+                intersects[0].object.material.color.set(new THREE.Color(waarde/maxwaarde, 1-waarde/maxwaarde, 0))
+                intersects[0].object.material = new THREE.MeshBasicMaterial();
+                //intersects[0].object.material.color.setHex(0xff00ff);
+                console.log("asdkjnm, ")
+                group.add(intersects[0].object);
+                intersected = intersects[0].object;
 
 
-                document.getElementById("name").value = intersects[0].object.name
-                document.getElementById("nametype").value = intersects[0].object.nametype
-                document.getElementById("recclass").value = intersects[0].object.recclass
-                document.getElementById("mass").value = intersects[0].object.mass
-                document.getElementById("fall").value = intersects[0].object.fall
-                document.getElementById("year").value = intersects[0].object.year
-                document.getElementById("reclat").value = intersects[0].object.reclat
-                document.getElementById("reclong").value = intersects[0].object.reclong
+                document.getElementById("name").value = intersects[0].object.name;
+                //document.getElementById("nametype").value = intersects[0].object.nametype
+                document.getElementById("recclass").value = intersects[0].object.recclass;
+                document.getElementById("mass").value = intersects[0].object.mass;
+                document.getElementById("fall").value = intersects[0].object.fall;
+                document.getElementById("year").value = intersects[0].object.year;
+                document.getElementById("reclat").value = intersects[0].object.reclat;
+                document.getElementById("reclong").value = intersects[0].object.reclong;
             }
         }
     }
@@ -168,6 +178,9 @@ oReq2.onreadystatechange = function(){
 oReq2.send();
 
 function Update(){
+    for (i=group.children.length; i >= 1; i--){//0 mag niet weg want dat is de aarde
+        group.remove(group.children[i]);
+    }
     var count = 0
 
     var yearmin = document.getElementById("yearmin").value;
@@ -177,8 +190,8 @@ function Update(){
     var massmax = document.getElementById("massmax").value;
 
     for (var i of data){
-        if (i.year >= yearmin && i.year <= yearmax && i.mass/1000 >= massmin && i.mass <= massmax){
-            addPoint(i.name,i.nametype, i.recclass, i.mass/1000, i.fall, i.year, i.reclat, i.reclong);
+        if (i.year >= yearmin && i.year <= yearmax && i.mass/1000. >= massmin && i.mass/1000. <= massmax){
+            addPoint(i.name,i.nametype, i.recclass, i.mass/1000., i.fall, i.year, i.reclat, i.reclong);
             count++;
         }
     }
@@ -209,12 +222,12 @@ var targetlong = 0
 function pan(name){
     rotating = true
     var country = countries[countrylist.findIndex(function(x){return x==name})]
-    console.log(country)
+    //console.log(country)
     targetlat = (country.lat)/180.*Math.PI
     targetlong = -(country.long+90)/360.*Math.PI*2
-    console.log(group.rotation)
-    console.log(targetlat)
-    console.log(targetlong)
+    // console.log(group.rotation)
+    // console.log(targetlat)
+    // console.log(targetlong)
 }
 
 
@@ -229,15 +242,17 @@ function animate(){
         if (group.rotation.x - targetlat < 0.01 && group.rotation.y - targetlong < 0.01){
             rotating = false;
         }else{
-            group.rotation.x -= (group.rotation.x - targetlat)/5
-            group.rotation.y -= (group.rotation.y - targetlong)/5
+
+            group.rotation.x -= ((group.rotation.x - targetlat))/3
+            group.rotation.y -= ((group.rotation.y - targetlong))/3
         }
     }
 }
 
 function addPoint(name, nametype, recclass, mass, fall, year, reclat, reclong){
     //var pointGeometry = new THREE.CylinderBufferGeometry(0.04*Math.log10(Math.log(mass)+10), 0.04*Math.log10(mass)/5, (Math.log10(mass)**2)/5, 3);//(radius top, radius bottom, length, number of edges)
-    var pointGeometry = new THREE.BoxBufferGeometry(0.04*Math.log10(Math.log10(mass*1000)+10), (Math.log10(mass*1000)**2)/5, 0.04*Math.log10(Math.log10(mass*1000)+10));
+    //var pointGeometry = new THREE.BoxBufferGeometry(0.04*Math.log10(Math.log10(mass*1000)+10), (Math.log10(mass*1000)**2)/5, 0.04*Math.log10(Math.log10(mass*1000)+10));
+    var pointGeometry = new THREE.BoxBufferGeometry(0.1, 5, 0.1);
     
     //probeer:
         //width:
@@ -259,7 +274,11 @@ function addPoint(name, nametype, recclass, mass, fall, year, reclat, reclong){
     var vec3 = new THREE.Vector3(point.position.z, 0, -point.position.x).normalize();
     point.rotateOnAxis(vec3, theta);
 
-    point.material.color.set(0xffffff)
+
+    //point.material.color.set(new THREE.Color((Math.log10(mass)+3)/8, 1-(Math.log10(mass)+3)/8, 0))
+    waarde = (Math.log10(mass*1000)**2)/5
+    maxwaarde = (Math.log10(10**5)**2)/5
+    point.material.color.set(new THREE.Color(waarde/maxwaarde, 1-waarde/maxwaarde, 0))
 
     point.name = name
     point.nametype = nametype

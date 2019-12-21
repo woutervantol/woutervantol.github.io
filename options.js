@@ -21,7 +21,14 @@ var massmin = document.getElementById("massmin");
 var massmax = document.getElementById("massmax");
 
 var apply = document.getElementById("apply");
+var reset = document.getElementById("reset");
+var about = document.getElementById("about");
+var overlay = document.getElementById("overlay");
 
+yearmin.addEventListener("keydown", event => {if (event.isComposing || event.keyCode === 13) {Update();}});
+yearmax.addEventListener("keydown", event => {if (event.isComposing || event.keyCode === 13) {Update();}});
+massmin.addEventListener("keydown", event => {if (event.isComposing || event.keyCode === 13) {Update();}});
+massmax.addEventListener("keydown", event => {if (event.isComposing || event.keyCode === 13 ) {Update();}});
 
 //om de slider de input van de textvakjes te geven
 yearmin.oninput = function(){
@@ -41,13 +48,26 @@ massmax.oninput = function(){
 }
 
 apply.onclick = function(){
-    for (i=group.children.length; i >= 1; i--){//0 mag niet weg want dat is de aarde
-        group.remove(group.children[i]);
-    }
-
     Update();
 }
 
+reset.onclick = function(){
+    yearmin.value = 861;
+    yearmax.value = 2019;
+    massmin.value = 0.001;
+    massmax.value = 10000;
+    $("#yearslider").slider("values", 0, 861);
+    $("#yearslider").slider("values", 1, 2019);
+    $("#massslider").slider("values", 0, -3);
+    $("#massslider").slider("values", 1, 5);
+}
+
+about.onclick = function(){
+    overlay.style.display = "block"
+}
+overlay.onclick = function(){
+    overlay.style.display = "none"
+}
 
 $(function(){
     $("#yearslider").slider({
@@ -96,8 +116,8 @@ $(function(){
             }else{
                 massmax.value = Math.floor(10**$(this).slider("values")[1])
             }
-            handleleft.text($(this).slider("values")[0]);
-            handleright.text($(this).slider("values")[1]);   
+            //handleleft.text($(this).slider("values")[0]);
+            //handleright.text($(this).slider("values")[1]);   
             
         }
     });
@@ -117,3 +137,12 @@ $(function(){
     });
 });
 
+
+
+
+// $( function() {
+//     $( "#reset, .widget button" ).button();
+//     $( "button, input, a" ).click( function( event ) {
+//     //   event.preventDefault();
+//     } );
+//   } );
